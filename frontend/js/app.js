@@ -1,5 +1,6 @@
 const baseUrl = "http://127.0.0.1:8000" 
 
+// LOGIN JS//
 function login() { 
   const loginPage = document.querySelector("#loginPage");
   if (!loginPage)  return;
@@ -42,8 +43,47 @@ function saveTokenUser(tokens,idUser,admin) {
   localStorage.setItem("accessToken", tokens.access);
   localStorage.setItem("idUser", idUser);
 }
+// FIN LOGIN JS//
 
-// JS Pagos //
+// SIGNUP JS//
+function signup(){
+  console.log('CargandoSignPage!!!')
+  const signupPage = document.querySelector("#signupPage");
+  if (!signupPage)  return;
+
+  console.log('CargandoSignPage--')
+  const signupForm = document.querySelector("#signupForm");
+  
+  signupForm.addEventListener('submit', async function(event){ 
+    event.preventDefault();
+    const formData = new FormData(signupForm)
+    const payload = JSON.stringify(Object.fromEntries(formData))
+    console.log(formData)
+    console.log("cargando POST SignupForm")
+
+    console.log(signupForm)
+    console.log(payload)
+    const response = await fetch(`${baseUrl}/api/v2/users/signup/`,
+      {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: payload
+
+      }
+      );
+      const json = await response.json();
+      window.alert("Nuevo usuario creado correctamente")
+      
+  } )
+}
+// Fin signup//
+
+
+
+// Añadir nuevo_pago JS //
 
 function pagos() {
   const loginPagos = document.querySelector("#pagosPage");
@@ -76,6 +116,7 @@ function pagos() {
       }
       );
       const json = await response.json(); 
+      window.alert("Nuevo pago realizado correctamente")
   } )
 }
 
@@ -106,7 +147,10 @@ const json = await response.json();
 const services = json.results;
 return services
 }
+// Fin Añadir nuevo_pago//
 
 
+//LLAMANDO A LAS FUNCIONES CUANDO SE CARGA LA PAGINA//
 window.addEventListener('load', login );
 window.addEventListener('load', pagos );
+window.addEventListener('load', signup);
