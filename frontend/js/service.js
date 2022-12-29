@@ -1,6 +1,7 @@
 var multi = document.querySelector(".multi");
 var token= localStorage.getItem('accessToken')
-
+var usuario= JSON.parse(sessionStorage.getItem("user"));
+var result=document.querySelector('.respuesta');
 
 async function getServices(){
     try {
@@ -44,8 +45,17 @@ function droplist(){
     console.log(sessionStorage.selection)
 }
 
+if(!usuario.is_superuser){
+  result.innerHTML=""
+  result.innerHTML+=`<div>El usuario no tiene permisos para acceder a esta Vista</div>`
+  console.log(usuario.is_superuser);
+  document.body.innerHTML = result.outerHTML;
+}
+else{
+  console.log(usuario.is_superuser);
+  getServices();
+}
 
-getServices();
 
 console.log(sessionStorage.selection)
 
