@@ -4,7 +4,8 @@ async function getUser(){
         const id=localStorage.getItem("idUser");
         const response = await fetch(`http://127.0.0.1:8000/api/v2/users/${id}/`);
         const usuario = await  response.json();
-        
+        console.log(usuario)
+        sessionStorage.setItem('user',JSON.stringify(usuario));
         createButton(usuario)
       } catch (error) {
         console.log(error);
