@@ -34,14 +34,16 @@ async function postLogin(payload) {
   );
   const json = await response.json();
   const tokens = json.tokens;
-  saveTokenUser(tokens);
+  const id=json.id;
+  saveTokenUser(tokens,id);
 
   console.log(json);
   return ;
 }
 
-function saveTokenUser(tokens){
+function saveTokenUser(tokens,idUser,admin){
   localStorage.setItem("accessToken", tokens.access);
+  localStorage.setItem("idUser", idUser);
   
 }
 
