@@ -31,13 +31,16 @@ async function postLogin(payload) {
   );
   const json = await response.json();
   const tokens = json.tokens;
-  saveTokenUser(tokens);
+  const id=json.id;
+  saveTokenUser(tokens,id);
   console.log(json);
   return ;
 }
 
-function saveTokenUser(tokens){
-  localStorage.setItem("accessToken", tokens.access);  
+
+function saveTokenUser(tokens,idUser,admin) {
+  localStorage.setItem("accessToken", tokens.access);
+  localStorage.setItem("idUser", idUser);
 }
 
 // JS Pagos //
@@ -76,7 +79,7 @@ function pagos() {
   } )
 }
 
-async function populateServices(selectTag){
+async function populateServices(selectTag) {
   const services = await getServices()
   console.log (services)
 
