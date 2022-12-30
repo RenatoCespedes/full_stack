@@ -24,8 +24,17 @@ function createService(){
             }
             );
             const json = await response.json();
-            window.alert("Nuevo servicio creado correctamente");
-            location.reload();
+            if(response.status == 200 || response.status == 201) { 
+                // agregar validador de datos!
+                Swal.fire("Servicio creado correctamente").then((result)=>{
+                  location.reload();
+                })
+                
+              }
+              else {
+                Swal.fire({title:"Error: Uno o varios campos estan vacios",icon: 'error',
+            })
+              }
         } )
         
 }
