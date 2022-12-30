@@ -20,7 +20,6 @@ function createButton(usuario){
     }
     else{
         nav.innerHTML+=`<a class="nav-link" href="./servicios.html">Servicios</a>`;
-        console.log(usuario.is_superuser)
     }
 }
 getUser()
