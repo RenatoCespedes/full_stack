@@ -35,7 +35,7 @@ async function postLogin(payload) {
   const id=json.id;
   if ( tokens ){
     saveTokenUser(tokens,id);
-    window.location.href = '/frontend/index.html';
+    window.location.href = './index.html';
   }
 
   else {
@@ -92,20 +92,7 @@ function signup(){
 }
 // Fin signup//
 
-// closes the session//
-function close_session(){
-  console.log("calling close session")
-  const closeSessionButton = document.getElementById("js_close_session")
 
-  if (!closeSessionButton) return
-  
-  closeSessionButton.addEventListener("click", function(){
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("idUser");  
-    window.location.href = "./login.html"
-  })
-
-}
 
 // Añadir nuevo_pago JS //
 
@@ -148,6 +135,10 @@ function pagos() {
       //console.log(json)
       if(response.status == 201) { 
         Swal.fire("Nuevo pago realizado correctamente")
+        if (!localStorage.refresh){
+          location.reload();
+          localStorage.setItem('refresh', "1");
+          }
       }
       else {
         Swal.fire("Se encontraron errores: verificar que los datos esten corectamente ingresados.")
@@ -196,4 +187,3 @@ return services
 window.addEventListener('load', login );
 window.addEventListener('load', pagos );
 window.addEventListener('load', signup);
-window.addEventListener('load', close_session);
