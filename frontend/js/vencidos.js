@@ -41,7 +41,7 @@ function changePageV(page)
             
                     <div class="col-sm">
                         <div class="card-body">
-                            <img class="rounded-circle" src="${vencidos.results[i].extra_data.logo}" alt="logo">  
+                            <img class="rounded-circle" src="${vencidos.results[i].extra_data.logo}" width="30" height="30" alt="logo">  
                         </div>  
                          
                            
