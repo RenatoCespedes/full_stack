@@ -86,7 +86,7 @@ function signup(){
         Swal.fire("Nuevo usuario creado correctamente")
       }
       else {
-        Swal.fire(" Se encontraron errores:",`${JSON.stringify(json)}`)
+        Swal.fire(" Se encontraron errores: verificar que los datos esten corectamente ingresados.")
       }
   } )
 }
@@ -145,7 +145,7 @@ function pagos() {
         }
       )
       const json = await response.json(); 
-      console.log(json)
+      //console.log(json)
       if(response.status == 201) { 
         Swal.fire("Nuevo pago realizado correctamente")
       }
