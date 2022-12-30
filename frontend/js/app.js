@@ -33,7 +33,14 @@ async function postLogin(payload) {
   const json = await response.json();
   const tokens = json.tokens;
   const id=json.id;
-  saveTokenUser(tokens,id);
+  if ( tokens ){
+    saveTokenUser(tokens,id);
+    window.location.href = '/frontend/index.html';
+  }
+
+  else {
+    window.alert("email o contraseña invalido, intentar nuevamente")
+  }
   console.log(json);
   return ;
 }
@@ -47,7 +54,6 @@ function saveTokenUser(tokens,idUser,admin) {
 
 // SIGNUP JS//
 function signup(){
-  console.log('CargandoSignPage!!!')
   const signupPage = document.querySelector("#signupPage");
   if (!signupPage)  return;
 
@@ -75,13 +81,27 @@ function signup(){
       }
       );
       const json = await response.json();
-      window.alert("Nuevo usuario creado correctamente")
       
+      // agregar validador de datos!
+      window.alert("Nuevo usuario creado correctamente")
   } )
 }
 // Fin signup//
 
+// closes the session//
+function close_session(){
+  console.log("calling close session")
+  const closeSessionButton = document.getElementById("js_close_session")
 
+  if (!closeSessionButton) return
+  
+  closeSessionButton.addEventListener("click", function(){
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("idUser");  
+    window.location.href = "/frontend/home.html"
+  })
+
+}
 
 // Añadir nuevo_pago JS //
 
@@ -154,3 +174,4 @@ return services
 window.addEventListener('load', login );
 window.addEventListener('load', pagos );
 window.addEventListener('load', signup);
+window.addEventListener('load', close_session);
