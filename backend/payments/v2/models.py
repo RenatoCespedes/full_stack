@@ -6,7 +6,7 @@ class Service(models.Model):
     id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=40)
     description=models.TextField()
-    logo=models.ImageField()
+    logo=models.URLField(max_length=1000)
 
 class Payment_users(models.Model):
     id=models.AutoField(primary_key=True)

@@ -38,26 +38,79 @@ function createSelect(data){
     
 }
 function droplist(){
-    var valores=document.getElementById("mySelect")
-    valores.addEventListener("change",function(){
+    var valores=document.getElementById("mySelect");
+    var nameService=document.querySelector("#editname");
+    var description=document.querySelector("#editprefix");
+    var logo=document.querySelector("#editlogo");
+
+    valores.addEventListener("change",async function(){
+        
         sessionStorage.setItem("selection", valores.value)
-    })
-    console.log(sessionStorage.selection)
+        var servdata=await editService();
+        
+
+        nameService.value=servdata.name;
+        description.value=servdata.description;
+        logo.value=servdata.logo;
+    });
+    const formUpdate=document.getElementById("modService");
+    // console.log("fm")
+    formUpdate.addEventListener('submit', async function(event){ 
+    event.preventDefault();
+    // strjson="{'name': 'Disney 2', 'description': 'Servicio Disney', 'logo': 'time.png'}"
+    const dataChanged = new FormData(formUpdate)
+    console.log(Object.fromEntries(dataChanged))
+    const strjson = JSON.stringify(Object.fromEntries(dataChanged))
+    console.log(dataChanged)
+    console.log("cargando update service")
+
+    console.log(formUpdate)
+    console.log(strjson)
+    const response = await fetch(`http://127.0.0.1:8000/api/v2/service/${sessionStorage.getItem('selection')}/`,
+      {
+        method: "PATCH",
+        headers:{
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: strjson
+
+      }
+      );
+      const json = await response.json();
+      console.log(response)
+      // window.alert("Nuevo servicio creado correctamente");
+      location.reload();
+  } );
+
+    
+    
+}
+
+async function editService(){
+  const response=await fetch(`http://127.0.0.1:8000/api/v2/service/${sessionStorage.getItem('selection')}`,{
+      headers:{
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+  datosService= await response.json();
+  console.log(datosService);
+  return datosService;
 }
 
 if(!usuario.is_superuser){
   result.innerHTML=""
   result.innerHTML+=`<div>El usuario no tiene permisos para acceder a esta Vista</div>`
-  console.log(usuario.is_superuser);
+
   document.body.innerHTML = result.outerHTML;
 }
 else{
-  console.log(usuario.is_superuser);
+
   getServices();
 }
 
 
-console.log(sessionStorage.selection)
 
 
 
