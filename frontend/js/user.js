@@ -6,7 +6,8 @@ async function getUser(){
         const usuario = await  response.json();
         console.log(usuario)
         sessionStorage.setItem('user',JSON.stringify(usuario));
-        createButton(usuario)
+        createButton(usuario);
+        notUser();
       } catch (error) {
         console.log(error);
       }
@@ -20,6 +21,12 @@ function createButton(usuario){
     }
     else{
         nav.innerHTML+=`<a class="nav-link" href="./servicios.html">Servicios</a>`;
+    }
+}
+
+function notUser(){
+    if(sessionStorage.user==='{"detail":"Not found."}'){
+        window.location.href = "./login.html";
     }
 }
 getUser()
