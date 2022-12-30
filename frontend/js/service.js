@@ -78,9 +78,19 @@ function droplist(){
       }
       );
       const json = await response.json();
-      console.log(response)
-      // window.alert("Nuevo servicio creado correctamente");
-      location.reload();
+      console.log(response.status)
+      if(response.status == 200 || response.status == 201) { 
+        // agregar validador de datos!
+        Swal.fire("Servicio editado correctamente").then((result)=>{
+          location.reload();
+        })
+        
+      }
+      else {
+        Swal.fire({title:"Error: No se selecciono ningun servicio",icon: 'error',
+      })
+      }
+      
   } );
 
     
