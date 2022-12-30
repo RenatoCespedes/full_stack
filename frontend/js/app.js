@@ -39,7 +39,7 @@ async function postLogin(payload) {
   }
 
   else {
-    window.alert("email o contraseña invalido, intentar nuevamente")
+    Swal.fire("Email o contraseña invalido, intentar nuevamente.")
   }
   console.log(json);
   return ;
@@ -81,9 +81,13 @@ function signup(){
       }
       );
       const json = await response.json();
-      
-      // agregar validador de datos!
-      window.alert("Nuevo usuario creado correctamente")
+      if(response.status == 200) { 
+        // agregar validador de datos!
+        Swal.fire("Nuevo usuario creado correctamente")
+      }
+      else {
+        Swal.fire(" Se encontraron errores:",`${JSON.stringify(json)}`)
+      }
   } )
 }
 // Fin signup//
@@ -98,7 +102,7 @@ function close_session(){
   closeSessionButton.addEventListener("click", function(){
     localStorage.removeItem("accessToken");
     localStorage.removeItem("idUser");  
-    window.location.href = "/frontend/home.html"
+    window.location.href = "./login.html"
   })
 
 }
@@ -115,28 +119,44 @@ function pagos() {
   payForm.addEventListener('submit', async function(event){ 
     event.preventDefault();
     const formData = new FormData(payForm)
+    const idUser = localStorage.getItem('idUser')
+
     let currentDay = new Date()
     currentDay.setHours(currentDay.getHours() - 5)
     currentDay = currentDay.toJSON().split("T")[0]
 
     formData.append("Payment_date", currentDay);
+    formData.append("user_id", idUser);
     
     const payload = JSON.stringify(Object.fromEntries(formData))
 
     console.log("cargando POST")
     console.log(payload)
-    const response = await fetch(`${baseUrl}/api/v2/pay/`,
-      {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: payload
-      }
-      );
+    const token = localStorage.getItem('accessToken')
+    try {
+      const response = await fetch(`${baseUrl}/api/v2/pay/`, {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: payload
+        }
+      )
       const json = await response.json(); 
-      window.alert("Nuevo pago realizado correctamente")
+      console.log(json)
+      if(response.status == 201) { 
+        Swal.fire("Nuevo pago realizado correctamente")
+      }
+      else {
+        Swal.fire("Se encontraron errores: verificar que los datos esten corectamente ingresados.")
+      }
+      
+    } catch (error) {
+      Swal.fire("Se encontraron errores: verificar que los datos esten corectamente ingresados.")      
+    }
+
   } )
 }
 
@@ -153,12 +173,14 @@ async function populateServices(selectTag) {
 }
 
 async function getServices() {
+  const token = localStorage.getItem('accessToken')
   const response = await fetch(`${baseUrl}/api/v2/service/`,
   {
     method: "GET",
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
   }
 );
