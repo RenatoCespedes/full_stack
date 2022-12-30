@@ -6,6 +6,7 @@ var token= localStorage.getItem('accessToken')
 
 
 var objJson=JSON.parse(localStorage.getItem('realizados'));
+
 console.log(objJson)
 
 var current_page = 1;
@@ -41,8 +42,9 @@ function changePage(page)
     if (page > numPages()) page = numPages();//console.log("mayor numpages",objJson);
 
     main.innerHTML = "";
-
+    idUser=localStorage.idUser;
     for (var i = (page-1) * records_per_page; i < (page * records_per_page) && i < objJson.results.length; i++) {
+        
         main.innerHTML += `
         <br>
         <div class="card border border-success content">
@@ -50,7 +52,7 @@ function changePage(page)
             
                     <div class="col-sm ">
                         <div class="card-body ">
-                        <img class="rounded-circle" src=" ${objJson.results[i].service.logo}" alt="logo">
+                        <img class="rounded-circle" src=" ${objJson.results[i].service.logo}" width="20" height="20" alt="logo">
                         </div>    
                     </div>
                     <div class="col-sm">
@@ -72,6 +74,7 @@ function changePage(page)
         </div>
          
         `;
+        
         // objJson.results[i].service.name + "<br>";
     }
     page_span.innerHTML = page + "/" + numPages();;
@@ -95,7 +98,7 @@ function changePage(page)
 
 function numPages()
 {
-    // console.log("numpages",objJson)
+    
     return Math.ceil(objJson.count / records_per_page);
 }
 
@@ -127,161 +130,22 @@ async function getTask() {
       
       localStorage.setItem('realizados', JSON.stringify(data));
       localStorage.setItem('vencidos', JSON.stringify(data1));
-      
+      if (!localStorage.refresh){
+        location.reload();
+        localStorage.setItem('refresh', "1");
+        }
+       
       
     } catch (error) {
       console.log(error);
+      location.reload();
     }
   }
 
-// function renderTasks(data,data1) {
-//     main.innerHTML = "";
-//     main1.innerHTML = "";
-//     // main.innerHTML += `
-//     // <div class="mb-5">
-//     //     <a href="./post.html" class="btn btn-primary">Crear</a>
-//     // </div>
-//     // `;
-//     main.innerHTML +=`
-//     <div class=" ">
-//             <div class="row">
-            
-//                     <div class="col-sm">
-//                         <div class="card-body">
-                             
-//                         </div>  
-                         
-                           
-                        
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             Servicio
-//                         </div>
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             Fecha de pago
-//                         </div>    
-//                     </div>
-//                     <div class="col">
-//                         <div class="card-body">
-//                             Cantidad
-//                         </div>    
-//                     </div>
-//             </div>
-//         </div>
-//         `;
-//     //console.log(data.count)
-//     data.results.forEach((task) => {
-//         main.innerHTML += `
-//         <br>
-//         <div class="card border border-success content">
-//             <div class="row no-gutters">
-            
-//                     <div class="col-sm ">
-//                         <div class="card-body ">
-//                         <img class="rounded-circle" src=" ${task.service.logo}" alt="logo">
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             ${task.service.name}
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             ${task.Payment_date}
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             ${task.Amount}
-//                         </div>    
-//                     </div>
-//             </div>
-//         </div>
-         
-//         `;
-//     });
-//     // main.innerHTML+= `<a href = "#" id = "loadMore"> Load More </a>`
-//     main1.innerHTML +=`
-//     <div class="container">
-//             <div class="row">
-            
-//                     <div class="col-sm">
-//                         <div class="card-body">
-                             
-//                         </div>  
-                         
-                           
-                        
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             Servicio
-//                         </div>
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             Fecha de pago
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             Cantidad
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                     <div class="card-body">
-//                         Penalidad
-//                     </div>    
-//                 </div>
-//             </div>
-//         </div>
-//         `;
-//     data1.results.forEach((task1) => {
-//         main1.innerHTML += `
-//         <br>
-//         <div class="card border border-danger">
-//             <div class="row">
-            
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             <img class="rounded-circle" src="${task1.extra_data.logo}" alt="logo">  
-//                         </div>  
-                         
-                           
-                        
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             ${task1.extra_data.servicio}
-//                         </div>
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             ${task1.extra_data.date}
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                         <div class="card-body">
-//                             ${task1.extra_data.monto}
-//                         </div>    
-//                     </div>
-//                     <div class="col-sm">
-//                     <div class="card-body">
-//                         ${task1.Penalty_fee_amount}
-//                     </div>    
-//                 </div>
-//             </div>
-//         </div>
-//         `;
-//     });
-// }
-getTask();
-changePage(1);
 
-// dropdownSelect();
+
+getTask();
+
+changePage(1);
 
 
